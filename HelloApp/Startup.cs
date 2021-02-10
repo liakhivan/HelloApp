@@ -14,6 +14,7 @@ namespace HelloApp
     {
         public void Configure(IApplicationBuilder app)
         {
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<AutentificationMiddleware>();
             app.UseMiddleware<RoutingMiddleware>();
         }
