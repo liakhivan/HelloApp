@@ -17,38 +17,17 @@ namespace HelloApp
         {
             _env = env;
         }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-            app.Map("/home", (home) =>
-            {
-                home.Map("/about", AboutPage);
-            });
+            app.UseToken("666");
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Page not found!");
-            });
-        }
-
-        public void HomePage(IApplicationBuilder app)
-        {
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("It's home page");
-            });
-        }
-        public void AboutPage(IApplicationBuilder app)
-        {
-            app.Run(async(context) => 
-            {
-                await context.Response.WriteAsync("It's about page in home page.");
+                await context.Response.WriteAsync("Hello World!");
             });
         }
     }
