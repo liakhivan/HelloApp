@@ -21,13 +21,20 @@ namespace HelloApp
         {
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseToken("666");
-
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                context.Response.Headers["Content-Type"] = "text/html; charset=utf-8";
+
+                if(env.IsEnvironment("Test"))
+                {
+                    await context.Response.WriteAsync("Is testing");
+                }
+                else
+                {
+                    await context.Response.WriteAsync("I don't know -\\_(*_*)_/-");
+                }
             });
         }
     }
