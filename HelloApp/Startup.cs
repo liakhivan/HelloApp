@@ -12,23 +12,10 @@ namespace HelloApp
 {
     public class Startup
     {
-        IWebHostEnvironment _env;
-        public Startup(IWebHostEnvironment env)
-        {
-            _env = env;
-        }
-        public void ConfigureServices(IServiceCollection services)
-        {
-        }
-
         public void Configure(IApplicationBuilder app)
         {
-            app.UseToken("666");
-
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseMiddleware<AutentificationMiddleware>();
+            app.UseMiddleware<RoutingMiddleware>();
         }
     }
 }

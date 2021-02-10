@@ -6,24 +6,23 @@ using System.Threading.Tasks;
 
 namespace HelloApp
 {
-    public class TokenMiddleware
+    public class AutentificationMiddleware
     {
-        private readonly RequestDelegate _next;
-        string pattern;
-        public TokenMiddleware(RequestDelegate next, string pattern)
+        private RequestDelegate _next;
+
+        public AutentificationMiddleware(RequestDelegate next)
         {
             this._next = next;
-            this.pattern = pattern;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             var token = context.Request.Query["token"];
-            if (token != pattern)
+
+            if(string.IsNullOrWhiteSpace(token))
             {
                 context.Response.StatusCode = 403;
-                await context.Response.WriteAsync("Token is invalid");
-            }
+            } 
             else
             {
                 await _next.Invoke(context);
