@@ -26,15 +26,29 @@ namespace HelloApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            app.Map("/home", (home) =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync($"Application Name: {_env.ApplicationName}");
-                });
+                home.Map("/about", AboutPage);
+            });
+
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Page not found!");
+            });
+        }
+
+        public void HomePage(IApplicationBuilder app)
+        {
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("It's home page");
+            });
+        }
+        public void AboutPage(IApplicationBuilder app)
+        {
+            app.Run(async(context) => 
+            {
+                await context.Response.WriteAsync("It's about page in home page.");
             });
         }
     }
