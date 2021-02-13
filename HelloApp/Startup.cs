@@ -1,6 +1,8 @@
+using HelloApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -14,34 +16,23 @@ namespace HelloApp
 {
     public class Startup
     {
-        IWebHostEnvironment _env;
-        public Startup(IWebHostEnvironment env)
+        public Startup()
         {
-            _env = env;
-        }
-        public void ConfigureServices(IServiceCollection services)
-        {
+            var builder = new ConfigurationBuilder().AddJsonFile("conf.json");
+            AppConfiguration = builder.Build();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public IConfiguration AppConfiguration { get; set; }
+
+        public void Configure(IApplicationBuilder app)
         {
-           // DefaultFilesOptions options = new DefaultFilesOptions();
-            //options.DefaultFileNames.Clear();
-           // options.DefaultFileNames.Add("hello.html");
+            //AppConfiguration["secondname"] = "Yebanski";
+            var color = AppConfiguration["color"];
+            string text = AppConfiguration["text"];
 
-            //app.UseDefaultFiles(options);
-            //app.UseDirectoryBrowser();
-            //app.UseDirectoryBrowser(new DirectoryBrowserOptions()
-            //{
-            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\html")), 
-
-            //    RequestPath = new PathString("/pages")
-            //});
-            //app.UseStaticFiles();
-            app.UseFileServer(enableDirectoryBrowsing: true);
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello world!");
+                await context.Response.WriteAsync($"<p style='color:{color};'>{text}</p>");
             });
         }
     }
